@@ -12,7 +12,8 @@ class Checkout(private val pricingRules: List<PricingRule>) {
             val customerName = customer.name
             val rule = pricingRules.find {
                 (it.customerName == customerName || it.customerName == "Default") &&
-                    (it.itemName == item.name || it.itemName == null)
+                    (it.itemName == item.name || it.itemName == null) &&
+                    (cart.count { cart -> cart.name == item.name } >= it.minimumQuantity)
             }
             val discountPercentage = rule?.discountPercentage ?: 0.0
             total += item.price * (1.0 - discountPercentage / 100.0)
